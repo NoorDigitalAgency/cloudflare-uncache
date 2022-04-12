@@ -32,7 +32,8 @@ function run() {
             (0, core_1.debug)(`Domain: '${domain}'`);
             const development = (0, core_1.getBooleanInput)('development_mode');
             (0, core_1.debug)(`Development mode: ${development}`);
-            const zonesResponse = (yield axios_1.default.get('https://api.cloudflare.com/client/v4/zones', { data: { name: domain }, headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` } })).data;
+            axios_1.default.interceptors.request.use(config => { config.headers.Authorization = `Bearer ${token}`; config.headers.Accept = 'application/json'; });
+            const zonesResponse = (yield axios_1.default.get('https://api.cloudflare.com/client/v4/zones', { data: { name: domain } })).data;
             if (!zonesResponse.success || zonesResponse.result_info.count !== 1) {
                 (0, core_1.startGroup)('Zones Response');
                 (0, core_1.warning)((0, util_1.inspect)(zonesResponse));
@@ -43,10 +44,10 @@ function run() {
             ;
             const id = (_a = zonesResponse.result.pop()) === null || _a === void 0 ? void 0 : _a.id;
             (0, core_1.debug)(`Zone id: ${id}`);
-            const purgeResponse = (yield axios_1.default.post(`https://api.cloudflare.com/client/v4/zones/${id}/purge_cache`, { purge_everything: true }, { headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` } })).data;
+            const purgeResponse = (yield axios_1.default.post(`https://api.cloudflare.com/client/v4/zones/${id}/purge_cache`, { purge_everything: true })).data;
             if (!purgeResponse.success)
                 (0, core_1.warning)('Could not Purge the Cache.');
-            const settingsResponse = (yield axios_1.default.patch(`https://api.cloudflare.com/client/v4/zones/${id}/settings/development_mode`, { value: "on" }, { headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` } })).data;
+            const settingsResponse = (yield axios_1.default.patch(`https://api.cloudflare.com/client/v4/zones/${id}/settings/development_mode`, { value: "on" })).data;
             if (!settingsResponse.success)
                 (0, core_1.warning)('Could not enable the Development Mode.');
         }
