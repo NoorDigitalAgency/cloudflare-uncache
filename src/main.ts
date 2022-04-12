@@ -1,19 +1,50 @@
-import * as core from '@actions/core'
-import {wait} from './wait'
+import { debug, warning, getInput, getBooleanInput, startGroup, endGroup } from '@actions/core';
+import axios from 'axios';
+import { Response } from './types';
+import { inspect } from 'util';
 
 async function run(): Promise<void> {
+
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const token = getInput('api_token');
 
-    core.setOutput('time', new Date().toTimeString())
+    debug(`Token: '${token}'`);
+
+    const domain = getInput('domain');
+
+    debug(`Domain: '${domain}'`);
+
+    const development = getBooleanInput('development_mode');
+
+    debug(`Development mode: ${development}`);
+
+    const zonesResponse = (await axios.get<Response>('https://api.cloudflare.com/client/v4/zones', {data: {name: domain}, headers: {'Accept': 'application/json', 'Authorization': `Bearer ${token}`}})).data;
+
+    if (!zonesResponse.success || zonesResponse.result_info.count !== 1) throw new Error('Could not get the zone id.');
+
+    const id = zonesResponse.result.pop()?.id;
+
+    debug(`Zone id: ${id}`);
+
+    const purgeResponse = (await axios.post<Response>(`https://api.cloudflare.com/client/v4/zones/${id}/purge_cache`, {purge_everything: true})).data;
+
+    if (!purgeResponse.success) warning('Could not Purge the Cache.');
+
+    const settingsResponse = (await axios.patch<Response>(`https://api.cloudflare.com/client/v4/zones/${id}/settings/development_mode`, {value: "on"})).data;
+
+    if (!settingsResponse.success) warning('Could not enable the Development Mode.');
+
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+
+    startGroup('Error');
+
+    warning(inspect(error));
+
+    endGroup();
+
+    if (error instanceof Error) warning(error.message);
   }
 }
 
-run()
+run();

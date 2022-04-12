@@ -1,11 +1,17 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'uncacher'
+description: 'Uncache the resources'
+author: 'Rojan Gh.'
 inputs:
-  milliseconds: # change this
+  api_token:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: API Token
+  domain:
+    required: true
+    description: Domain to run the Uncacher for
+  development_mode:
+    description: Turn on the Development Mode
+    default: 'true'
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'
