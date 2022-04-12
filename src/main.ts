@@ -21,7 +21,18 @@ async function run(): Promise<void> {
 
     const zonesResponse = (await axios.get<Response>('https://api.cloudflare.com/client/v4/zones', {data: {name: domain}, headers: {'Accept': 'application/json', 'Authorization': `Bearer ${token}`}})).data;
 
-    if (!zonesResponse.success || zonesResponse.result_info.count !== 1) throw new Error('Could not get the zone id.');
+    if (!zonesResponse.success || zonesResponse.result_info.count !== 1) {
+
+      startGroup('Zones Response');
+
+      warning(inspect(zonesResponse));
+
+      endGroup();
+
+      warning('Could not get the zone id.');
+
+      return;
+    };
 
     const id = zonesResponse.result.pop()?.id;
 
