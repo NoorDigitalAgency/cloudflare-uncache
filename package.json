@@ -1,8 +1,8 @@
 {
-  "name": "uncacher",
+  "name": "cloudflare-uncache",
   "version": "1.0.0",
   "private": true,
-  "description": "Uncache resources",
+  "description": "Cloudflare Uncache Action",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NoorDigitalAgency/uncacher.git"
+    "url": "git+https://github.com/NoorDigitalAgency/cloudflare-uncache.git"
   },
   "author": "Rojan Gh.",
   "license": "MIT",
