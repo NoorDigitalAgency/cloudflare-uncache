@@ -1,5 +1,5 @@
-name: 'uncacher'
-description: 'Uncache the resources'
+name: 'Cloudflare Uncache'
+description: 'Cloudflare Uncache Action'
 author: 'Rojan Gh.'
 inputs:
   api_token:
