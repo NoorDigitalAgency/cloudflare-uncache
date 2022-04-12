@@ -7,7 +7,7 @@ inputs:
     description: API Token
   domain:
     required: true
-    description: Domain to run the Uncacher for
+    description: Domain to Uncache
   development_mode:
     description: Turn on the Development Mode
     default: 'true'
