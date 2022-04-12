@@ -19,9 +19,9 @@ async function run(): Promise<void> {
 
     debug(`Development mode: ${development}`);
 
-    axios.interceptors.request.use(config => {config.headers!.Authorization = `Bearer ${token}`; config.headers!.Accept = 'application/json';});
+    const headers = {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`};
 
-    const zonesResponse = (await axios.get<Response>('https://api.cloudflare.com/client/v4/zones', {data: {name: domain}})).data;
+    const zonesResponse = (await axios.get<Response>('https://api.cloudflare.com/client/v4/zones', {data: {name: domain}, headers})).data;
 
     if (!zonesResponse.success || zonesResponse.result_info.count !== 1) {
 
@@ -40,11 +40,11 @@ async function run(): Promise<void> {
 
     debug(`Zone id: ${id}`);
 
-    const purgeResponse = (await axios.post<Response>(`https://api.cloudflare.com/client/v4/zones/${id}/purge_cache`, {purge_everything: true})).data;
+    const purgeResponse = (await axios.post<Response>(`https://api.cloudflare.com/client/v4/zones/${id}/purge_cache`, {purge_everything: true}, {headers})).data;
 
     if (!purgeResponse.success) warning('Could not Purge the Cache.');
 
-    const settingsResponse = (await axios.patch<Response>(`https://api.cloudflare.com/client/v4/zones/${id}/settings/development_mode`, {value: "on"})).data;
+    const settingsResponse = (await axios.patch<Response>(`https://api.cloudflare.com/client/v4/zones/${id}/settings/development_mode`, {value: "on"}, {headers})).data;
 
     if (!settingsResponse.success) warning('Could not enable the Development Mode.');
 
