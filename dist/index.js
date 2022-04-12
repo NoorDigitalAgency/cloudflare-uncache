@@ -33,7 +33,7 @@ function run() {
             const development = (0, core_1.getBooleanInput)('development_mode');
             (0, core_1.debug)(`Development mode: ${development}`);
             const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
-            const zonesResponse = (yield axios_1.default.get('https://api.cloudflare.com/client/v4/zones', { data: { name: domain }, headers })).data;
+            const zonesResponse = (yield axios_1.default.get('https://api.cloudflare.com/client/v4/zones', { params: { name: domain }, headers })).data;
             if (!zonesResponse.success || zonesResponse.result_info.count !== 1) {
                 (0, core_1.startGroup)('Zones Response');
                 (0, core_1.warning)((0, util_1.inspect)(zonesResponse));
@@ -53,7 +53,7 @@ function run() {
         }
         catch (error) {
             (0, core_1.startGroup)('Error');
-            (0, core_1.warning)((0, util_1.inspect)(error));
+            (0, core_1.debug)((0, util_1.inspect)(error));
             (0, core_1.endGroup)();
             if (error instanceof Error)
                 (0, core_1.warning)(error.message);

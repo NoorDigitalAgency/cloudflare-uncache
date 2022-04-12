@@ -21,7 +21,7 @@ async function run(): Promise<void> {
 
     const headers = {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`};
 
-    const zonesResponse = (await axios.get<Response>('https://api.cloudflare.com/client/v4/zones', {data: {name: domain}, headers})).data;
+    const zonesResponse = (await axios.get<Response>('https://api.cloudflare.com/client/v4/zones', {params: {name: domain}, headers})).data;
 
     if (!zonesResponse.success || zonesResponse.result_info.count !== 1) {
 
@@ -52,7 +52,7 @@ async function run(): Promise<void> {
 
     startGroup('Error');
 
-    warning(inspect(error));
+    debug(inspect(error));
 
     endGroup();
 
