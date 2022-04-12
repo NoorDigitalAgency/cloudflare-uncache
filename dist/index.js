@@ -43,10 +43,10 @@ function run() {
             ;
             const id = (_a = zonesResponse.result.pop()) === null || _a === void 0 ? void 0 : _a.id;
             (0, core_1.debug)(`Zone id: ${id}`);
-            const purgeResponse = (yield axios_1.default.post(`https://api.cloudflare.com/client/v4/zones/${id}/purge_cache`, { purge_everything: true })).data;
+            const purgeResponse = (yield axios_1.default.post(`https://api.cloudflare.com/client/v4/zones/${id}/purge_cache`, { purge_everything: true }, { headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` } })).data;
             if (!purgeResponse.success)
                 (0, core_1.warning)('Could not Purge the Cache.');
-            const settingsResponse = (yield axios_1.default.patch(`https://api.cloudflare.com/client/v4/zones/${id}/settings/development_mode`, { value: "on" })).data;
+            const settingsResponse = (yield axios_1.default.patch(`https://api.cloudflare.com/client/v4/zones/${id}/settings/development_mode`, { value: "on" }, { headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` } })).data;
             if (!settingsResponse.success)
                 (0, core_1.warning)('Could not enable the Development Mode.');
         }

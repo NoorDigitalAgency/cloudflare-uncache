@@ -38,11 +38,11 @@ async function run(): Promise<void> {
 
     debug(`Zone id: ${id}`);
 
-    const purgeResponse = (await axios.post<Response>(`https://api.cloudflare.com/client/v4/zones/${id}/purge_cache`, {purge_everything: true})).data;
+    const purgeResponse = (await axios.post<Response>(`https://api.cloudflare.com/client/v4/zones/${id}/purge_cache`, {purge_everything: true}, {headers: {'Accept': 'application/json', 'Authorization': `Bearer ${token}`}})).data;
 
     if (!purgeResponse.success) warning('Could not Purge the Cache.');
 
-    const settingsResponse = (await axios.patch<Response>(`https://api.cloudflare.com/client/v4/zones/${id}/settings/development_mode`, {value: "on"})).data;
+    const settingsResponse = (await axios.patch<Response>(`https://api.cloudflare.com/client/v4/zones/${id}/settings/development_mode`, {value: "on"}, {headers: {'Accept': 'application/json', 'Authorization': `Bearer ${token}`}})).data;
 
     if (!settingsResponse.success) warning('Could not enable the Development Mode.');
 
