@@ -1,4 +1,4 @@
-# Cloudflare Uncache Action
+# Cloudflare Uncache  Action
 
 Used for:
 - Clears the cache and enables the development mode for a domain of Cloudflare
