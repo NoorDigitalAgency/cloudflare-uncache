@@ -2,6 +2,7 @@ name: Auto Merge
 
 on:
   pull_request:
+    types: [opened]
 
 jobs:
   build:
@@ -10,4 +11,14 @@ jobs:
       - uses: actions/github-script@v6
         with:
           script: |
-              console.log(context);
+              function wait(milliseconds: number) {
+                return new Promise((resolve) => setTimeout(resolve, milliseconds));
+              }
+              let pull = { mergable: null };
+              while (pull.mergeable == null) {
+                await wait(5000);
+                pull = (await github.rest.pulls.get({ owner: context.repo.owner, repo: context.repo.repo, pull_number: pull.number })).data;
+              }
+              if (pull.mergable) {
+                await github.rest.pulls.merge({ owner: context.repo.owner, repo: context.repo.repo, pull_number: pull.number, merge_method: 'merge' });
+              }
