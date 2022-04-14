@@ -11,7 +11,7 @@ jobs:
       - uses: actions/github-script@v6
         with:
           script: |
-              function wait(milliseconds: number) {
+              function wait(milliseconds) {
                 return new Promise((resolve) => setTimeout(resolve, milliseconds));
               }
               let pull = { mergable: null };
