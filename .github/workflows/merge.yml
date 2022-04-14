@@ -14,7 +14,7 @@ jobs:
               function wait(milliseconds) {
                 return new Promise((resolve) => setTimeout(resolve, milliseconds));
               }
-              let pull = { mergable: null };
+              let pull = { mergable: null, number: context.payload.number };
               while (pull.mergeable == null) {
                 await wait(5000);
                 pull = (await github.rest.pulls.get({ owner: context.repo.owner, repo: context.repo.repo, pull_number: pull.number })).data;
