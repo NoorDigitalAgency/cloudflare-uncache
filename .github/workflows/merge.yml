@@ -20,5 +20,5 @@ jobs:
                 pull = (await github.rest.pulls.get({ owner: context.repo.owner, repo: context.repo.repo, pull_number: pull.number })).data;
               }
               if (pull.mergable) {
-                console.log((await github.rest.pulls.merge({ owner: context.repo.owner, repo: context.repo.repo, pull_number: pull.number, merge_method: 'merge' }).data);
+                console.log((await github.rest.pulls.merge({ owner: context.repo.owner, repo: context.repo.repo, pull_number: pull.number, merge_method: 'merge' })).data);
               }
